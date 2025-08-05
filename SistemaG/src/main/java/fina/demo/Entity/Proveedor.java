@@ -17,7 +17,7 @@ public class Proveedor {
     @Column(name = "RUC",length = 14)
     private String ruc;
 
-    @Column(name = "direccion",length = 20)
+    @Column(name = "direccion",length = 200)
     private String direc;
 
     public Proveedor() {
