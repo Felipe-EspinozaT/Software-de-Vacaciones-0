@@ -1,0 +1,39 @@
+package fina.demo.Entity;
+
+import jakarta.persistence.*;
+
+
+@Entity
+@Table(name="tipoVenta")
+public class TipoVenta {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "TipVenID")
+    private int id;
+    @Column(name="TipVenNom" , length = 100)
+    private String nom;
+
+    public TipoVenta() {
+    }
+
+    public TipoVenta(int id, String nom) {
+        this.id = id;
+        this.nom = nom;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getNom() {
+        return nom;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+}

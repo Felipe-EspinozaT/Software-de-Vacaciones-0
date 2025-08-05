@@ -23,14 +23,19 @@ public class Ventas {
     @JoinColumn(name = "usuarioID")
     private Usuario usuario;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "TipVentaId")
+    private TipoVenta tipoventa;
+
     public Ventas() {
     }
 
-    public Ventas(int id, double importeVenta, Cliente cliente, Usuario usuario) {
+    public Ventas(int id, double importeVenta, Cliente cliente, Usuario usuario, TipoVenta tipoventa) {
         this.id = id;
         this.importeVenta = importeVenta;
         this.cliente = cliente;
         this.usuario = usuario;
+        this.tipoventa = tipoventa;
     }
 
     public int getId() {
@@ -59,6 +64,14 @@ public class Ventas {
 
     public Usuario getUsuario() {
         return usuario;
+    }
+
+    public TipoVenta getTipoventa() {
+        return tipoventa;
+    }
+
+    public void setTipoventa(TipoVenta tipoventa) {
+        this.tipoventa = tipoventa;
     }
 
     public void setUsuario(Usuario usuario) {

@@ -24,9 +24,9 @@ public class Compra {
     @JoinColumn(name = "UsuarioID")
     private Usuario usuario;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    /*@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ClienteID")
-    private Cliente cliente;
+    private Cliente cliente;*/
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "ProveedorID")
@@ -39,12 +39,12 @@ public class Compra {
     public Compra() {
     }
 
-    public Compra(int id, Date fechaCom, double imporTotal, Usuario usuario, Cliente cliente, Proveedor proveedor, Moneda moneda) {
+    public Compra(int id, Date fechaCom, double imporTotal, Usuario usuario,  Proveedor proveedor, Moneda moneda) {
         this.id = id;
         this.fechaCom = fechaCom;
         this.imporTotal = imporTotal;
         this.usuario = usuario;
-        this.cliente = cliente;
+       // this.cliente = cliente;
         this.proveedor = proveedor;
         this.moneda = moneda;
     }
@@ -79,14 +79,6 @@ public class Compra {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
-    }
-
-    public Cliente getCliente() {
-        return cliente;
-    }
-
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
     }
 
     public Proveedor getProveedor() {

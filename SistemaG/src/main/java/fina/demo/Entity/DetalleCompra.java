@@ -26,9 +26,7 @@ public class DetalleCompra {
     @JoinColumn(name = "ComprID")
     private Compra compra;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "MonedaID")
-    private Moneda moneda;
+
 
     public DetalleCompra() {
     }
@@ -39,7 +37,6 @@ public class DetalleCompra {
         this.cant = cant;
         this.producto = producto;
         this.compra = compra;
-        this.moneda = moneda;
     }
 
     public int getId() {
@@ -82,11 +79,4 @@ public class DetalleCompra {
         this.compra = compra;
     }
 
-    public Moneda getMoneda() {
-        return moneda;
-    }
-
-    public void setMoneda(Moneda moneda) {
-        this.moneda = moneda;
-    }
 }
