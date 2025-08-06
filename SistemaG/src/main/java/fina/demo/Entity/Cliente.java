@@ -17,13 +17,37 @@ public class Cliente {
     @Column(name = "apellidoCli",length = 50)
     private String apellido;
 
+    @Column(name = "nroDocuCli",length = 15)
+    private String NroDocu;
+
+    @Column(name = "tipoDocuID")
+    private TIpoDocumento tipoDocumento;
+
     public Cliente() {
     }
 
-    public Cliente(int id, String nombre, String apellido) {
+    public String getNroDocu() {
+        return NroDocu;
+    }
+
+    public void setNroDocu(String nroDocu) {
+        NroDocu = nroDocu;
+    }
+
+    public TIpoDocumento getTipoDocumento() {
+        return tipoDocumento;
+    }
+
+    public void setTipoDocumento(TIpoDocumento tipoDocumento) {
+        this.tipoDocumento = tipoDocumento;
+    }
+
+    public Cliente(int id, String nombre, String apellido, String nroDocu, TIpoDocumento tipoDocumento) {
         this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
+        NroDocu = nroDocu;
+        this.tipoDocumento = tipoDocumento;
     }
 
     public String getApellido() {
