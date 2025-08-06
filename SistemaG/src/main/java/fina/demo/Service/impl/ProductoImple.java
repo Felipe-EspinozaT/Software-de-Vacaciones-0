@@ -27,6 +27,21 @@ public class ProductoImple implements ProductoService {
     }
 
     @Override
+    public List<Producto> lisP(int idL, int idF) {
+        return produRepo.findAll();
+    }
+
+    @Override
+    public List<Producto> listPCod(int idL, int idF, String cod) {
+        return produRepo.findAll();
+    }
+
+    @Override
+    public List<Producto> listPnom(int idL, int idF, String nom) {
+        return produRepo.findAll();
+    }
+
+    @Override
     public Producto agregarProducto(Producto p) {
         return produRepo.save(p);
     }
