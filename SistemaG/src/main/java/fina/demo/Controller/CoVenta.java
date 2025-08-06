@@ -1,5 +1,6 @@
 package fina.demo.Controller;
 
+import fina.demo.Entity.Familia;
 import fina.demo.Entity.Producto;
 import fina.demo.Service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -40,13 +42,13 @@ public class CoVenta {
     private FamiliaService famServi;
 
 
-    @GetMapping("/vista")
+    @GetMapping({"", "/", "/vista"})
     public ModelAndView v1(){
-        ModelAndView mav = new ModelAndView("vent");
+        ModelAndView mav = new ModelAndView("venta/vent");
 
-        //List< Producto > lista = produServi.listPCod(1,2,"23");
+        List<Producto> lista = new ArrayList<>();
 
-       // mav.addObject("listaP",lista );
+        mav.addObject("productos",lista);
 
 
 
