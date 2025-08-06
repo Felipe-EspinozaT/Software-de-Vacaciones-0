@@ -11,16 +11,11 @@ public class Cliente {
     @Column(name = "clienteID")
     private int id;
 
-    @Column(name = "nombreCli",length = 50)
-    private String nombre;
-
-    @Column(name = "apellidoCli",length = 50)
-    private String apellido;
-
     @Column(name = "nroDocuCli",length = 15)
     private String NroDocu;
 
-    @Column(name = "tipoDocuID")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "tipDocuId")
     private TIpoDocumento tipoDocumento;
 
     public Cliente() {
@@ -42,29 +37,12 @@ public class Cliente {
         this.tipoDocumento = tipoDocumento;
     }
 
-    public Cliente(int id, String nombre, String apellido, String nroDocu, TIpoDocumento tipoDocumento) {
+    public Cliente(int id,String nroDocu, TIpoDocumento tipoDocumento) {
         this.id = id;
-        this.nombre = nombre;
-        this.apellido = apellido;
         NroDocu = nroDocu;
         this.tipoDocumento = tipoDocumento;
     }
 
-    public String getApellido() {
-        return apellido;
-    }
-
-    public void setApellido(String apellido) {
-        this.apellido = apellido;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
 
     public int getId() {
         return id;

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Buscador de productos</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f2f2f2;
+    }
+
+    #search, #tipo-select {
+      width: 100%;
+      max-width: 500px;
+      padding: 10px;
+      font-size: 16px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    table {
+      width: 100%;
+      margin-top: 10px;
+      border-collapse: collapse;
+      background-color: #fff;
+    }
+
+    th, td {
+      padding: 10px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #eee;
+    }
+
+    tr:hover {
+      background-color: #f9f9f9;
+    }
+
+    .no-results {
+      margin-top: 10px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+
+<h2>Buscador de productos</h2>
+
+<input type="text" id="search" placeholder="Buscar por título...">
+
+<select id="tipo-select">
+  <option value="">-- Filtrar por tipo --</option>
+  <option th:each="l : ${linea}" th:value="${l.nom}" th:text="${l.nom}"></option>
+</select>
+
+<table id="results-table">
+  <thead>
+  <tr>
+    <th>cod</th>
+    <th>Descripción</th>
+    <th>precio</th>
+  </tr>
+  </thead>
+  <tbody id="table-body">
+  <!-- Se llenará con JavaScript -->
+  </tbody>
+</table>
+
+<div id="no-results" class="no-results" style="display:none;">No se encontraron resultados.</div>
+
+<!-- Datos desde backend -->
+<script th:inline="javascript">
+  const pp = /*[[${producto}]]*/ [];
+</script>
+
+<script>
+  const searchInput = document.getElementById("search");
+  const tipoSelect = document.getElementById("tipo-select");
+  const tableBody = document.getElementById("table-body");
+  const noResultsDiv = document.getElementById("no-results");
+
+  function renderTable() {
+    const searchQuery = searchInput.value.trim().toLowerCase();
+    const tipoFiltro = tipoSelect.value;
+
+    tableBody.innerHTML = "";
+
+    const filtered = pp.filter(p => {
+      const matchTitulo = p.cod.toLowerCase().includes(searchQuery);
+      const matchTipo = tipoFiltro === "" || p.linea.nom === tipoFiltro;
+      return matchTitulo && matchTipo;
+    });
+
+    if (filtered.length === 0) {
+      noResultsDiv.style.display = "block";
+      return;
+    } else {
+      noResultsDiv.style.display = "none";
+    }
+
+    filtered.forEach(p => {
+      const row = document.createElement("tr");
+
+      row.innerHTML = `
+        <td>${p.cod}</td>
+        <td>${p.descrip}</td>
+        <td>${p.precioSuge}</td>
+      `;
+
+      tableBody.appendChild(row);
+    });
+  }
+
+  searchInput.addEventListener("input", renderTable);
+  tipoSelect.addEventListener("change", renderTable);
+
+  // Mostrar todos los productos al cargar
+  renderTable();
+</script>
+
+</body>
+</html>

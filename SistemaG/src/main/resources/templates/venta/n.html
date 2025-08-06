@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Buscador tipo YouTube</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 40px;
+      background: #f9f9f9;
+    }
+
+    .search-container {
+      position: relative;
+      max-width: 500px;
+    }
+
+    #search-input {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .autocomplete-list {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      z-index: 10;
+      background: white;
+      border: 1px solid #ccc;
+      border-top: none;
+      max-height: 300px;
+      overflow-y: auto;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      border-radius: 0 0 8px 8px;
+    }
+
+    .autocomplete-item {
+      padding: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid #eee;
+    }
+
+    .autocomplete-item:hover {
+      background-color: #f1f1f1;
+    }
+
+    .autocomplete-icon {
+      margin-right: 10px;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+
+<h2>Buscador de clientes</h2>
+
+<div class="search-container">
+  <input type="text" id="search-input" placeholder="Buscar cliente...">
+  <div id="autocomplete-list" class="autocomplete-list"></div>
+</div>
+
+<!-- Thymeleaf script para inyectar datos -->
+<script th:inline="javascript">
+  const cli = [[${cliente}]];
+</script>
+
+<script>
+  const searchInput = document.getElementById("search-input");
+  const autocompleteList = document.getElementById("autocomplete-list");
+
+  function showSuggestions(query) {
+    autocompleteList.innerHTML = "";
+
+    if (!query) return;
+
+    const filtered = cli.filter(item =>
+      item.toLowerCase().includes(query.toLowerCase())
+    );
+
+    filtered.forEach(item => {
+      const div = document.createElement("div");
+      div.className = "autocomplete-item";
+
+      const icon = document.createElement("span");
+      icon.className = "autocomplete-icon";
+      icon.innerHTML = "🔍";
+
+      const text = document.createElement("span");
+      text.textContent = item;
+
+      div.appendChild(icon);
+      div.appendChild(text);
+
+      div.addEventListener("click", () => {
+        searchInput.value = item;
+        autocompleteList.innerHTML = "";
+      });
+
+      autocompleteList.appendChild(div);
+    });
+  }
+
+  searchInput.addEventListener("input", () => {
+    const query = searchInput.value.trim();
+    showSuggestions(query);
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest(".search-container")) {
+      autocompleteList.innerHTML = "";
+    }
+  });
+</script>
+
+</body>
+</html>

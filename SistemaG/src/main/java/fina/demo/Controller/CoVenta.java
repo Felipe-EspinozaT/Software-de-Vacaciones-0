@@ -1,6 +1,8 @@
 package fina.demo.Controller;
 
+import fina.demo.Entity.Cliente;
 import fina.demo.Entity.Familia;
+import fina.demo.Entity.Linea;
 import fina.demo.Entity.Producto;
 import fina.demo.Service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,13 +49,51 @@ public class CoVenta {
         ModelAndView mav = new ModelAndView("venta/vent");
 
         List<Producto> lista = new ArrayList<>();
+        List<Cliente> l = cliServi.listCliente();
+        List<String> lista2 = new ArrayList<>();
+        for (int i = 0; i < l.size() ; i++) {
+            lista2.add(l.get(i).getNroDocu());
+        }
 
         mav.addObject("productos",lista);
+        mav.addObject("cliente",lista2);
+
 
 
 
         return mav;
     }
 
+
+    @GetMapping("/p")
+    public ModelAndView vp(){
+        ModelAndView mav = new ModelAndView("venta/n");
+
+        List<Producto> lista = new ArrayList<>();
+        List<Cliente> l = cliServi.listCliente();
+        List<String> lista2 = new ArrayList<>();
+        for (int i = 0; i < l.size() ; i++) {
+            System.out.println(l.get(i).getNroDocu());
+            lista2.add(l.get(i).getNroDocu());
+        }
+
+        mav.addObject("productos",lista);
+        mav.addObject("cliente",lista2);
+        return mav;
+    }
+
+
+    @GetMapping("/p2")
+    public ModelAndView vp2(){
+        ModelAndView mav = new ModelAndView("venta/n2");
+
+        List<Producto> lista = produServi.listaP();
+        List<Linea> l = linServi.listarLi(1);
+        List<String> lista2 = new ArrayList<>();
+
+        mav.addObject("producto",lista);
+        mav.addObject("linea",l);
+        return mav;
+    }
 
 }
