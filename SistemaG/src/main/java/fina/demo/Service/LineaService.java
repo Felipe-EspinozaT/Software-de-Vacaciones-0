@@ -7,5 +7,6 @@ import java.util.List;
 public interface LineaService {
 
     public abstract List<Linea> listarLi(int idFa);
+    public abstract List<Linea> listLine();
     public abstract Linea agregarLi(Linea li);
 }

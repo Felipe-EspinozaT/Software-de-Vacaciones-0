@@ -21,6 +21,11 @@ public class LineaImple implements LineaService {
     }
 
     @Override
+    public List<Linea> listLine() {
+        return linRepo.findAll();
+    }
+
+    @Override
     public Linea agregarLi(Linea li) {
         return linRepo.save(li);
     }
