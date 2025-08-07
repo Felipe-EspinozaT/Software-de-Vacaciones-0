@@ -88,11 +88,12 @@ public class CoVenta {
         ModelAndView mav = new ModelAndView("venta/n2");
 
         List<Producto> lista = produServi.listaP();
-        List<Linea> l = linServi.listarLi(1);
-        List<String> lista2 = new ArrayList<>();
+        List<Linea> l = linServi.listLine();
+        List<Familia> listFami = famServi.findAllFamil();
 
         mav.addObject("producto",lista);
         mav.addObject("linea",l);
+        mav.addObject("familia", listFami);
         return mav;
     }
 

@@ -10,7 +10,7 @@
       background-color: #f2f2f2;
     }
 
-    #search, #tipo-select {
+    #search, #tipo-select, #tipo-select-fam {
       width: 100%;
       max-width: 500px;
       padding: 10px;
@@ -53,9 +53,13 @@
 
 <input type="text" id="search" placeholder="Buscar por título...">
 
+<select id="tipo-select-fam">
+  <option value="">-- Filtrar por Familia --</option>
+  <option th:each="f : ${familia}" th:value="${f.nom}" th:text="${f.nom}"></option>
+</select>
+
 <select id="tipo-select">
-  <option value="">-- Filtrar por tipo --</option>
-  <option th:each="l : ${linea}" th:value="${l.nom}" th:text="${l.nom}"></option>
+  <option value="">-- Filtrar por Tipo --</option>
 </select>
 
 <table id="results-table">
@@ -76,50 +80,76 @@
 <!-- Datos desde backend -->
 <script th:inline="javascript">
   const pp = /*[[${producto}]]*/ [];
+  const ppp = /*[[${linea}]]*/ [];
+
+
 </script>
 
 <script>
   const searchInput = document.getElementById("search");
   const tipoSelect = document.getElementById("tipo-select");
+  const tipoFamilia = document.getElementById("tipo-select-fam");
   const tableBody = document.getElementById("table-body");
   const noResultsDiv = document.getElementById("no-results");
 
+  // SOLO actualiza el combo de tipo basado en la familia seleccionada
+  function renderLinea() {
+    const familiaSeleccionada = tipoFamilia.value;
+
+    // Limpiar el combo de tipo
+    tipoSelect.innerHTML = '<option value="">-- Filtrar por Tipo --</option>';
+
+    // Obtener líneas únicas según familia seleccionada
+    const lineas = ppp.filter(p => !familiaSeleccionada || p.familia.nom === familiaSeleccionada).map(p => p.nom);
+
+    const lineasUnicas = [...new Set(lineas)];
+
+    // Agregar líneas al combo
+    lineasUnicas.forEach(linea => {
+      const option = document.createElement("option");
+      option.value = linea;
+      option.textContent = linea;
+      tipoSelect.appendChild(option);
+    });
+  }
+
+  // Filtra productos solo por título y tipo
   function renderTable() {
     const searchQuery = searchInput.value.trim().toLowerCase();
     const tipoFiltro = tipoSelect.value;
 
     tableBody.innerHTML = "";
 
-    const filtered = pp.filter(p => {
-      const matchTitulo = p.cod.toLowerCase().includes(searchQuery);
+    const filtrados = pp.filter(p => {
+      const matchTexto = p.descrip.toLowerCase().includes(searchQuery);
       const matchTipo = tipoFiltro === "" || p.linea.nom === tipoFiltro;
-      return matchTitulo && matchTipo;
+      return matchTexto && matchTipo;
     });
 
-    if (filtered.length === 0) {
+    if (filtrados.length === 0) {
       noResultsDiv.style.display = "block";
-      return;
     } else {
       noResultsDiv.style.display = "none";
     }
 
-    filtered.forEach(p => {
-      const row = document.createElement("tr");
-
-      row.innerHTML = `
+    filtrados.forEach(p => {
+      const fila = document.createElement("tr");
+      fila.innerHTML = `
         <td>${p.cod}</td>
         <td>${p.descrip}</td>
         <td>${p.precioSuge}</td>
       `;
-
-      tableBody.appendChild(row);
+      tableBody.appendChild(fila);
     });
   }
 
+  // Eventos
   searchInput.addEventListener("input", renderTable);
   tipoSelect.addEventListener("change", renderTable);
+  tipoFamilia.addEventListener("change", renderLinea);
 
-  // Mostrar todos los productos al cargar
+  // Inicialización
+  renderLinea();
   renderTable();
 </script>
 
