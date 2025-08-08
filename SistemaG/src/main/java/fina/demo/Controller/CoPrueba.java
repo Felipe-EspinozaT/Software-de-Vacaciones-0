@@ -1,12 +1,10 @@
 package fina.demo.Controller;
 
-import fina.demo.Entity.Cliente;
-import fina.demo.Entity.Familia;
-import fina.demo.Entity.Linea;
-import fina.demo.Entity.Producto;
+import fina.demo.Entity.*;
 import fina.demo.Service.FamiliaService;
 import fina.demo.Service.LineaService;
 import fina.demo.Service.ProductoService;
+import fina.demo.Service.UnidadMedidaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -31,6 +29,10 @@ public class CoPrueba {
     @Autowired
     @Qualifier("produservi")
     private ProductoService proservi;
+
+    @Autowired
+    @Qualifier("unidaMedidaService")
+    private UnidadMedidaService uniMedi;
 
     @GetMapping({"", "/", "/vista"})
     public ModelAndView vp2(){
@@ -80,13 +82,15 @@ public class CoPrueba {
 
         Producto produ = proservi.getProducto(id);
         List<Linea> lin = linServi.listLine();
+        List<UnidadMedidas> uniMedidas = uniMedi.listUniMedi();
         mav.addObject("producto",produ);
         mav.addObject("linea",lin);
+        mav.addObject("unidadmedida",uniMedidas);
 
         return mav;
     }
 
-    @PostMapping("//modi/{id}")
+    @PostMapping("/modi/{id}")
     public String v2Produ(@ModelAttribute Producto produ, @PathVariable int id){
 
         proservi.agregarProducto(new Producto(id,produ.getCod(),produ.getDescrip(),produ.getPrecioSuge(),produ.getStock(),produ.getModeloProdu(),produ.getUnidadMedida(),produ.getLinea()));
