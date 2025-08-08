@@ -29,4 +29,9 @@ public class LineaImple implements LineaService {
     public Linea agregarLi(Linea li) {
         return linRepo.save(li);
     }
+
+    @Override
+    public Linea getLinea(int id) {
+        return linRepo.getById(id);
+    }
 }
