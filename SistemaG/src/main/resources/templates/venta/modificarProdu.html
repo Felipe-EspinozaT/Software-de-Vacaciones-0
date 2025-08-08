@@ -33,7 +33,9 @@
   <input type="text" th:field="*{modeloProdu}" id="produ-mode">
 
   <label for="unidad-medi">Unidadad Medida</label>
-  <input type="text" th:field="*{unidadMedida.unidadMedi}" id="unidad-medi">
+  <select th:field="*{unidadMedida}" id="unidad-medi" required>
+    <option th:each="f:${unidadmedida}" th:value="${f.id}" th:text="${f.unidadMedi}"> Seleccione Unidad de Medida</option>
+  </select>
 
   <label for="linea-cbo">Linea</label>
   <select th:field="*{linea}" id="linea-cbo" required>
