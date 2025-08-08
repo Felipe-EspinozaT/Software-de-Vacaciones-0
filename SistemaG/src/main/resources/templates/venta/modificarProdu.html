@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+  <meta charset="UTF-8">
+  <title>Modificar Línea</title>
+  <style>
+    body { font-family: Arial; padding: 20px; background: #f4f4f4; }
+    form { background: #fff; padding: 20px; border-radius: 5px; max-width: 500px; margin: auto; }
+    label, input, select { display: block; width: 100%; margin-bottom: 10px; }
+    button { padding: 10px 15px; }
+  </style>
+</head>
+<body>
+
+<h2>Modificar Producto</h2>
+
+<form th:action = "@{/pro2/modi/{id}(id=${producto.id})}" th:object ="${producto}" method="post">
+  <input type="hidden" id="linea-id">
+
+  <label for="produ-des"> Descripcion </label>
+  <input type="text" th:field="*{descrip}" id="produ-des" required>
+
+  <label for="produ-cod">Cod Producto</label>
+  <input type="text" th:field="*{cod}" id="produ-cod" required>
+
+  <label for="produ-preSuge">Precio Sugerido</label>
+  <input type="number" th:field="*{precioSuge}" id="produ-preSuge" required>
+
+  <label for="produ-stock"> Stock</label>
+  <input type="text" th:field="*{stock}" id="produ-stock" required>
+
+  <label for="produ-mode"> Modelo Producto</label>
+  <input type="text" th:field="*{modeloProdu}" id="produ-mode">
+
+  <label for="unidad-medi">Unidadad Medida</label>
+  <input type="text" th:field="*{unidadMedida.unidadMedi}" id="unidad-medi">
+
+  <label for="linea-cbo">Linea</label>
+  <select th:field="*{linea}" id="linea-cbo" required>
+    <option th:each="f : ${linea}" th:value="${f.id}"  th:text="${f.nom}">-- Seleccionar Linea --</option>
+  </select>
+
+  <button type="submit">Guardar Cambios</button>
+  <button type="button" th:onclick="'window.location.href=\'' + @{/pro2/listp} + '\''">Cancelar</button>
+
+
+</form>
+
+<script>
+</script>
+
+</body>
+</html>

@@ -56,6 +56,7 @@ public class CoPrueba {
         return mav;
     }
 
+
     @PostMapping("/p3/{id}")
     public String v1 (@ModelAttribute Linea lin, @PathVariable int id){
         linServi.agregarLi(new Linea(id,lin.getNom(),lin.getFamilia()));
@@ -71,6 +72,25 @@ public class CoPrueba {
         mav.addObject("producto",listProdu);
         mav.addObject("linea",listLin);
         return mav;
+    }
+
+    @GetMapping("/modi/{id}")
+    public ModelAndView modificarProdu(@PathVariable int id){
+        ModelAndView mav = new ModelAndView("venta/modificarProdu");
+
+        Producto produ = proservi.getProducto(id);
+        List<Linea> lin = linServi.listLine();
+        mav.addObject("producto",produ);
+        mav.addObject("linea",lin);
+
+        return mav;
+    }
+
+    @PostMapping("//modi/{id}")
+    public String v2Produ(@ModelAttribute Producto produ, @PathVariable int id){
+
+        proservi.agregarProducto(new Producto(id,produ.getCod(),produ.getDescrip(),produ.getPrecioSuge(),produ.getStock(),produ.getModeloProdu(),produ.getUnidadMedida(),produ.getLinea()));
+        return "redirect:/pro2/listp";
     }
 
 }
