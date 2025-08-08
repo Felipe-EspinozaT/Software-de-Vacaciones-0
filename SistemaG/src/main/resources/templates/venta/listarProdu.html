@@ -25,7 +25,7 @@
 
   <label>Linea:</label>
   <select id="tipo-select-fam">
-    <option value="">-- Filtrar por Familia --</option>
+    <option value="">-- Filtrar por Linea --</option>
     <option th:each="f : ${linea}" th:value="${f.nom}" th:text="${f.nom}"></option>
   </select>
 
@@ -52,7 +52,7 @@
     <td th:text="${p.linea.id}"></td>
 
     <td>
-      <button type="button" th:onclick="'window.location.href=\'' + @{/pro2/p3/{id}(id=${p.id})} + '\''">Editar</button>
+      <button type="button" th:onclick="'window.location.href=\'' + @{/pro2/modi/{id}(id=${p.id})} + '\''">Editar</button>
     </td>
 
   </tr>
