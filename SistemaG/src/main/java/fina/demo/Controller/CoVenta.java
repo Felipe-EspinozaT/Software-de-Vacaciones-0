@@ -58,7 +58,13 @@ public class CoVenta {
         mav.addObject("productos",lista);
         mav.addObject("cliente",lista2);
 
+        List<Producto> listap = produServi.listaP();
+        List<Linea> l2 = linServi.listLine();
+        List<Familia> listFami = famServi.findAllFamil();
 
+        mav.addObject("producto",listap);
+        mav.addObject("linea",l2);
+        mav.addObject("familia", listFami);
 
 
         return mav;

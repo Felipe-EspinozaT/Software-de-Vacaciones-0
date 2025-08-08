@@ -3,15 +3,108 @@
 <head>
   <meta charset="UTF-8">
   <title>Lista de Productos</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 40px;
+      background: #f9f9f9;
+    }
+
+    .search-container {
+      position: relative;
+      max-width: 500px;
+    }
+
+    #buscaCLi {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .autocomplete-list {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      z-index: 10;
+      background: white;
+      border: 1px solid #ccc;
+      border-top: none;
+      max-height: 300px;
+      overflow-y: auto;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      border-radius: 0 0 8px 8px;
+    }
+
+    .autocomplete-item {
+      padding: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid #eee;
+    }
+
+    .autocomplete-item:hover {
+      background-color: #f1f1f1;
+    }
+
+    .autocomplete-icon {
+      margin-right: 10px;
+      color: #888;
+    }
+
+
+
+
+
+
+    #search, #tipo-select, #tipo-select-fam {
+      width: 100%;
+      max-width: 500px;
+      padding: 10px;
+      font-size: 16px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    table {
+      width: 100%;
+      margin-top: 10px;
+      border-collapse: collapse;
+      background-color: #fff;
+    }
+
+    th, td {
+      padding: 10px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #eee;
+    }
+
+    tr:hover {
+      background-color: #f9f9f9;
+    }
+
+    .no-results {
+      margin-top: 10px;
+      color: #666;
+    }
+  </style>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body class="p-4">
 
-<!-- 1️⃣ Textbox y botón -->
-<div class="mb-3 d-flex">
-  <input type="text" class="form-control me-2" placeholder="Buscar producto" id="buscarProducto">
-  <button class="btn btn-primary" type="button">Buscar</button>
+<div class="search-container">
+  <input type="text" id="buscaCLi" placeholder="Ingresar cliente...">
+  <div id="autocomplete-list" class="autocomplete-list"></div>
 </div>
 
 <!-- 2️⃣ Tabla con lista de productos -->
@@ -51,29 +144,184 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Agregar Producto</h5>
+        <h5 class="modal-title">Buscador de productos</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
       </div>
       <div class="modal-body">
-        <form th:action="@{/producto/agregar}" method="post">
-          <div class="mb-3">
-            <label for="descripcion" class="form-label">Descripción</label>
-            <input type="text" class="form-control" id="descripcion" name="descripcion">
-          </div>
-          <div class="mb-3">
-            <label for="precio" class="form-label">Precio</label>
-            <input type="number" class="form-control" id="precio" name="precio">
-          </div>
-          <div class="mb-3">
-            <label for="existencia" class="form-label">Existencia</label>
-            <input type="number" class="form-control" id="existencia" name="existencia">
-          </div>
-          <button type="submit" class="btn btn-primary">Guardar</button>
-        </form>
+
+        <input type="text" id="search" placeholder="Buscar por título...">
+
+        <select id="tipo-select-fam">
+          <option value="">-- Filtrar por Familia --</option>
+          <option th:each="f : ${familia}" th:value="${f.nom}" th:text="${f.nom}"></option>
+        </select>
+
+        <select id="tipo-select">
+          <option value="">-- Filtrar por Tipo --</option>
+        </select>
+
+
+
+
+        <table id="results-table">
+          <thead>
+          <tr>
+            <th>Codigo</th>
+            <th>Descripción</th>
+            <th>Stock</th>
+            <th>precio</th>
+          </tr>
+          </thead>
+          <tbody id="table-body">
+          <!-- Se llenará con JavaScript -->
+          </tbody>
+        </table>
+
+        <div id="no-results" class="no-results" style="display:none;">No se encontraron resultados.</div>
+
       </div>
     </div>
   </div>
 </div>
+
+
+
+<script th:inline="javascript">
+  const cli = [[${cliente}]];
+  const pp = [[${producto}]];
+  const ppp = [[${linea}]];
+
+
+  const buscaC = document.getElementById("buscaCLi");
+  const autocompleteList = document.getElementById("autocomplete-list");
+  const searchInput = document.getElementById("search");
+  const tipoSelect = document.getElementById("tipo-select");
+  const tipoFamilia = document.getElementById("tipo-select-fam");
+  const tableBody = document.getElementById("table-body");
+  const noResultsDiv = document.getElementById("no-results");
+
+  function showSuggestions(query) {
+    autocompleteList.innerHTML = "";
+
+    if (!query) return;
+
+    const filtered = cli.filter(item =>
+      item.toLowerCase().includes(query.toLowerCase())
+    );
+
+    filtered.forEach(item => {
+      const div = document.createElement("div");
+      div.className = "autocomplete-item";
+
+      const icon = document.createElement("span");
+      icon.className = "autocomplete-icon";
+
+
+      const text = document.createElement("span");
+      text.textContent = item;
+
+      div.appendChild(icon);
+      div.appendChild(text);
+
+      div.addEventListener("click", () => {
+        buscaC.value = item;
+        autocompleteList.innerHTML = "";
+      });
+
+      autocompleteList.appendChild(div);
+    });
+  }
+
+  buscaC.addEventListener("input", () => {
+    const query = buscaC.value.trim();
+    showSuggestions(query);
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest(".search-container")) {
+      autocompleteList.innerHTML = "";
+    }
+  });
+
+
+
+
+
+
+
+  // SOLO actualiza el combo de tipo basado en la familia seleccionada
+  function renderLinea() {
+    const familiaSeleccionada = tipoFamilia.value;
+
+    // Limpiar el combo de tipo
+    tipoSelect.innerHTML = '<option value="">-- Filtrar por Tipo --</option>';
+
+    // Obtener líneas únicas según familia seleccionada
+    const lineas = ppp.filter(p => !familiaSeleccionada || p.familia.nom === familiaSeleccionada).map(p => p.nom);
+
+    const lineasUnicas = [...new Set(lineas)];
+
+    // Agregar líneas al combo
+    lineasUnicas.forEach(linea => {
+      const option = document.createElement("option");
+      option.value = linea;
+      option.textContent = linea;
+      tipoSelect.appendChild(option);
+    });
+  }
+
+  // Filtra productos solo por título y tipo
+  function renderTable() {
+    const searchQuery = searchInput.value.trim().toLowerCase();
+    const tipoFiltro = tipoSelect.value;
+
+    tableBody.innerHTML = "";
+
+    const filtrados = pp.filter(p => {
+      const matchTexto = p.descrip.toLowerCase().includes(searchQuery);
+      const matchTipo = tipoFiltro === "" || p.linea.nom === tipoFiltro;
+      return matchTexto && matchTipo;
+    });
+
+    if (filtrados.length === 0) {
+      noResultsDiv.style.display = "block";
+    } else {
+      noResultsDiv.style.display = "none";
+    }
+
+    filtrados.forEach(p => {
+      const fila = document.createElement("tr");
+      fila.innerHTML = `
+        <td>${p.cod}</td>
+        <td>${p.descrip}</td>
+        <td>${p.stock}</td>
+        <td>${p.precioSuge}</td>
+      `;
+
+
+        // Evento para cargar el código en el input
+      fila.addEventListener("click", () => {
+        document.getElementById("nuevoProducto").value = p.cod;
+
+        const modal = bootstrap.Modal.getInstance(document.getElementById("miModal"));
+modal.hide();
+
+      });
+
+      tableBody.appendChild(fila);
+    });
+  }
+
+  // Eventos
+  searchInput.addEventListener("input", renderTable);
+  tipoSelect.addEventListener("change", renderTable);
+  tipoFamilia.addEventListener("change", renderLinea);
+
+  // Inicialización
+  renderLinea();
+  renderTable();
+</script>
+
 
 </body>
 </html>
