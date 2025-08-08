@@ -27,15 +27,28 @@ public class Ventas {
     @JoinColumn(name = "TipVentaId")
     private TipoVenta tipoventa;
 
+    @Column(name = "nroCompor",length = 50)
+    private String NroComprobante;
+
+    @Column(name = "correlativo",length = 10)
+    private String correlativo;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "TipComproId")
+    private TipoComprobante tipoComprobante;
+
     public Ventas() {
     }
 
-    public Ventas(int id, double importeVenta, Cliente cliente, Usuario usuario, TipoVenta tipoventa) {
+    public Ventas(int id, double importeVenta, Cliente cliente, Usuario usuario, TipoVenta tipoventa, String nroComprobante, String correlativo, TipoComprobante tipoComprobante) {
         this.id = id;
         this.importeVenta = importeVenta;
         this.cliente = cliente;
         this.usuario = usuario;
         this.tipoventa = tipoventa;
+        NroComprobante = nroComprobante;
+        this.correlativo = correlativo;
+        this.tipoComprobante = tipoComprobante;
     }
 
     public int getId() {
@@ -64,6 +77,30 @@ public class Ventas {
 
     public Usuario getUsuario() {
         return usuario;
+    }
+
+    public String getNroComprobante() {
+        return NroComprobante;
+    }
+
+    public void setNroComprobante(String nroComprobante) {
+        NroComprobante = nroComprobante;
+    }
+
+    public String getCorrelativo() {
+        return correlativo;
+    }
+
+    public void setCorrelativo(String correlativo) {
+        this.correlativo = correlativo;
+    }
+
+    public TipoComprobante getTipoComprobante() {
+        return tipoComprobante;
+    }
+
+    public void setTipoComprobante(TipoComprobante tipoComprobante) {
+        this.tipoComprobante = tipoComprobante;
     }
 
     public TipoVenta getTipoventa() {
