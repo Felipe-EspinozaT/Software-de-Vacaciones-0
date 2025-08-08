@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+  <meta charset="UTF-8">
+  <title>CRUD de Líneas</title>
+  <script defer src="crud-lineas.js"></script>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; background: #f9f9f9; }
+    th, td { padding: 10px; border: 1px solid #ddd; }
+    input, select { padding: 8px; margin: 5px; width: 100%; max-width: 400px; }
+    button { margin: 5px 0; padding: 8px 12px; }
+  </style>
+</head>
+<body>
+
+<h2>Gestión de Líneas</h2>
+
+<!-- Formulario para crear/editar -->
+<form id="linea-form">
+  <input type="hidden" id="linea-id">
+  <label>Nombre de la línea:</label>
+  <input type="text" id="linea-nom" required>
+
+  <label>Familia:</label>
+  <select id="tipo-select-fam">
+    <option value="">-- Filtrar por Familia --</option>
+    <option th:each="f : ${familia}" th:value="${f.nom}" th:text="${f.nom}"></option>
+  </select>
+
+
+  <button type="submit">Guardar</button>
+</form>
+
+<!-- Tabla de resultados -->
+<table>
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>Nombre</th>
+    <th>Familia</th>
+    <th>Acciones</th>
+  </tr>
+  </thead>
+  <tbody id="linea-tabla">
+  <tr th:each="p : ${linea}">
+    <td th:text="${p.id}"></td>
+    <td th:text="${p.nom}"></td>
+    <td th:text="${p.familia.id}"></td>
+
+    <td>
+      <button type="button" th:onclick="'window.location.href=\'' + @{/pro2/p3/{id}(id=${p.id})} + '\''">Editar</button>
+    </td>
+
+  </tr>
+  </tbody>
+</table>
+
+
+</body>
+</html>
+

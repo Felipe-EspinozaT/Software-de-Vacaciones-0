@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Modificar Línea</title>
+  <style>
+    body { font-family: Arial; padding: 20px; background: #f4f4f4; }
+    form { background: #fff; padding: 20px; border-radius: 5px; max-width: 500px; margin: auto; }
+    label, input, select { display: block; width: 100%; margin-bottom: 10px; }
+    button { padding: 10px 15px; }
+  </style>
+</head>
+<body>
+
+<h2>Modificar Línea</h2>
+
+<form th:action = "@{/pro2/p3/{id}(id=${linea.id})}" th:object ="${linea}" method="post">
+  <input type="hidden" id="linea-id">
+
+  <label for="linea-nom">Nombre de la línea</label>
+  <input type="text" th:field="*{nom}" id="linea-nom" required>
+
+  <label for="linea-familia">Familia</label>
+  <select th:field="*{familia}" id="linea-familia" required>
+    <option th:each="f : ${familia}" th:value="${f.id}"  th:text="${f.nom}">-- Seleccionar Familia --</option>
+  </select>
+
+  <button type="submit">Guardar Cambios</button>
+  <button type="button" th:onclick="'window.location.href=\'' + @{/pro2} + '\''">Cancelar</button>
+
+</form>
+
+<script>
+</script>
+
+</body>
+</html>
