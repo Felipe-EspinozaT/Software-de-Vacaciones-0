@@ -18,15 +18,15 @@
 <h2>Gestión de Líneas</h2>
 
 <!-- Formulario para crear/editar -->
-<form id="linea-form">
-  <input type="hidden" id="linea-id">
+<form  th:action="@{/pro2}" id="linea-form"  method="get">
+
   <label>Nombre de la línea:</label>
-  <input type="text" id="linea-nom" required>
+  <input type="text" id="linea-nom" name="buscarNom">
 
   <label>Familia:</label>
-  <select id="tipo-select-fam">
+  <select id="tipo-select-fam" name="familiaSelect">
     <option value="">-- Filtrar por Familia --</option>
-    <option th:each="f : ${familia}" th:value="${f.nom}" th:text="${f.nom}"></option>
+    <option th:each="f : ${familia}" th:value="${f.id}" th:text="${f.nom}"></option>
   </select>
 
 

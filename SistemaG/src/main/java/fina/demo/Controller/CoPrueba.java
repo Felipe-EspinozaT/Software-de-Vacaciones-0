@@ -35,15 +35,21 @@ public class CoPrueba {
     private UnidadMedidaService uniMedi;
 
     @GetMapping({"", "/", "/vista"})
-    public ModelAndView vp2(){
+    public ModelAndView vp2(
+            @RequestParam(required = false) String buscarNom,
+            @RequestParam( required = false) Integer familiaSelect) {
+
         ModelAndView mav = new ModelAndView("venta/modificarLinea");
 
-        List<Linea> l = linServi.listLine();
+        List<Linea>  l = linServi.listarxNom(buscarNom,familiaSelect);
+
+
         List<Familia> listFami = famServi.findAllFamil();
-        mav.addObject("linea",l);
+        mav.addObject("linea", l);
         mav.addObject("familia", listFami);
         return mav;
     }
+
 
     @GetMapping("/p3/{id}")
     public ModelAndView vp3(@PathVariable int id){
