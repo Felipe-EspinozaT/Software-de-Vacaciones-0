@@ -15,14 +15,27 @@ public class Linea {
     @Column(name = "LimNom",length = 200)
     private String nom;
 
+    @Column(name = "LimCorre",length = 200)
+    private String correlativo;
+
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "LimFam")
     private Familia familia;
 
-    public Linea(int id, String nom, Familia familia) {
+    public Linea(int id, String nom, String correlativo, Familia familia) {
         this.id = id;
         this.nom = nom;
+        this.correlativo = correlativo;
         this.familia = familia;
+    }
+
+    public String getCorrelativo() {
+        return correlativo;
+    }
+
+    public void setCorrelativo(String correlativo) {
+        this.correlativo = correlativo;
     }
 
     public Linea() {

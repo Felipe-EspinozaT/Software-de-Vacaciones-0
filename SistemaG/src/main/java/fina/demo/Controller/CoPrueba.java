@@ -67,7 +67,7 @@ public class CoPrueba {
 
     @PostMapping("/p3/{id}")
     public String v1 (@ModelAttribute Linea lin, @PathVariable int id){
-        linServi.agregarLi(new Linea(id,lin.getNom(),lin.getFamilia()));
+        linServi.agregarLi(new Linea(id,lin.getNom(),lin.getCorrelativo(),lin.getFamilia()));
         return "redirect:/pro2";
     }
 
