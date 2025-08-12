@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service("tipUsuService")
+@Service("tipoComproService")
 public class TipoComproImple implements TipoComproService {
     @Autowired
     @Qualifier("typeComproRepo")

@@ -1,25 +1,25 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-
   <meta charset="UTF-8">
-  <title>CRUD de Líneas</title>
-  <script defer src="crud-lineas.js"></script>
+  <title>CRUD de Líneas y Filtro de Productos</title>
   <style>
     body { font-family: Arial; padding: 20px; }
     table { width: 100%; border-collapse: collapse; margin-top: 20px; background: #f9f9f9; }
     th, td { padding: 10px; border: 1px solid #ddd; }
-    input, select { padding: 8px; margin: 5px; width: 100%; max-width: 400px; }
+    input, select { padding: 8px; margin: 5px 0; width: 100%; max-width: 400px; }
     button { margin: 5px 0; padding: 8px 12px; }
+    #no-results { color: red; margin-top: 10px; }
   </style>
 </head>
 <body>
 
 <h2>Gestión de Líneas</h2>
 
-<!-- Formulario para crear/editar -->
+<!-- Formulario para crear/editar líneas -->
 <form id="linea-form">
   <input type="hidden" id="linea-id">
+
   <label>Nombre de la línea:</label>
   <input type="text" id="linea-nom" required>
 
@@ -29,11 +29,10 @@
     <option th:each="f : ${familia}" th:value="${f.nom}" th:text="${f.nom}"></option>
   </select>
 
-
   <button type="submit">Guardar</button>
 </form>
 
-<!-- Tabla de resultados -->
+<!-- Tabla de líneas -->
 <table>
   <thead>
   <tr>
@@ -48,16 +47,42 @@
     <td th:text="${p.id}"></td>
     <td th:text="${p.nom}"></td>
     <td th:text="${p.familia.id}"></td>
-
     <td>
       <button type="button" th:onclick="'window.location.href=\'' + @{/pro2/p3/{id}(id=${p.id})} + '\''">Editar</button>
     </td>
-
   </tr>
   </tbody>
 </table>
 
+<!-- Filtro y tabla de productos -->
+<h3>Productos filtrados</h3>
+
+<label>Buscar por descripción:</label>
+<input type="text" id="search" placeholder="Buscar por descripción...">
+
+<label>Tipo (Línea):</label>
+<select id="tipo-select">
+  <option value="">-- Filtrar por Tipo --</option>
+</select>
+
+<div id="no-results" style="display: none;">No se encontraron productos.</div>
+
+<table>
+  <thead>
+  <tr>
+    <th>Código</th>
+    <th>Descripción</th>
+    <th>Precio Sugerido</th>
+  </tr>
+  </thead>
+  <tbody id="table-body">
+  <!-- Se llenará con JS -->
+  </tbody>
+</table>
+
+<!-- Script principal -->
+<script>
+</script>
 
 </body>
 </html>
-
