@@ -56,7 +56,9 @@
       color: #888;
     }
 
+    #tabla1{
 
+    }
 
 
 
@@ -102,99 +104,106 @@
 </head>
 <body class="p-4">
 
-<div class="search-container">
-  <input type="text" id="buscaCLi" placeholder="Ingresar cliente...">
-  <div id="autocomplete-list" class="autocomplete-list"></div>
-</div>
+<form th:action="@{/venta/post}" id="miForm" method="post">
 
-<!-- 2️⃣ Tabla con lista de productos -->
-<table class="table table-bordered table-striped">
-  <thead class="table-dark">
-  <tr>
-    <th>ID</th>
-    <th>Descripción</th>
-    <th>Precio</th>
-    <th>Stock</th>
-    <th>Modelo</th>
-    <th>Lineea</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr th:each="p : ${productos}">
-    <td th:text="${p.cod}"></td>
-    <td th:text="${p.descrip}"></td>
-    <td th:text="${p.precioSuge}"></td>
-    <td th:text="${p.stock}"></td>
-    <td th:text="${p.modeloProdu}"></td>
-    <td th:text="${p.linea.id}"></td>
-  </tr>
-  </tbody>
-</table>
+  <div class="search-container">
+    <input type="text" id="buscaCLi" name="cliente" placeholder="Ingresar cliente...">
+    <div id="autocomplete-list" class="autocomplete-list"></div>
 
-<!-- 3️⃣ Textbox y botón que abre modal -->
-<div class="mt-3 d-flex">
-  <input type="text" class="form-control me-2" placeholder="Nuevo producto" id="nuevoProducto">
-  <button class="btn btn-success" type="button" data-bs-toggle="modal" data-bs-target="#miModal">
-    Agregar
-  </button>
-</div>
-
-<!-- 4️⃣ Modal -->
-<div class="modal fade" id="miModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Buscador de productos</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-      </div>
-      <div class="modal-body">
-
-        <input type="text" id="search" placeholder="Buscar por título...">
-
-        <select id="tipo-select-fam">
-          <option value="">-- Filtrar por Familia --</option>
-          <option th:each="f : ${familia}" th:value="${f.nom}" th:text="${f.nom}"></option>
-        </select>
-
-        <select id="tipo-select">
-          <option value="">-- Filtrar por Tipo --</option>
-        </select>
-
-
-
-
-        <table id="results-table">
-          <thead>
-          <tr>
-            <th>Codigo</th>
-            <th>Descripción</th>
-            <th>Stock</th>
-            <th>precio</th>
-          </tr>
-          </thead>
-          <tbody id="table-body">
-          <!-- Se llenará con JavaScript -->
-          </tbody>
-        </table>
-
-        <div id="no-results" class="no-results" style="display:none;">No se encontraron resultados.</div>
-
-      </div>
-    </div>
+    <button type="submit">
+      comprar
+    </button>
   </div>
-</div>
+
+  <div id="tabla1" >
+    <table  class="table table-bordered table-striped">
+      <thead class="table-dark">
+      <tr>
+        <th>Codigo</th>
+        <th>Descripcion</th>
+        <th>Precio</th>
+        <th>Stock</th>
+      </tr>
+      </thead>
+      <tbody>
+
+      <!--  <tr th:each="p, iterStat : ${productos.lista}">
+        <td><input type="text" th:name="'lista[' + ${iterStat.index} + '].cod'" th:value="${p.cod}"/></td>
+        <td><input type="text" th:name="'lista[' + ${iterStat.index} + '].descrip'" th:value="${p.descrip}"/></td>
+        <td><input type="text" th:name="'lista[' + ${iterStat.index} + '].precioSuge'" th:value="${p.precioSuge}"/></td>
+        <td><input type="text" th:name="'lista[' + ${iterStat.index} + '].stock'" th:value="${p.stock}"/></td>
+      </tr>
+    <tr th:each="p : ${productos}">
+        <td th:text="${p.cod}"    th:value="${p.cod}"></td>
+        <td th:text="${p.descrip}" th:value="${p.descrip}"></td>
+        <td th:text="${p.precioSuge}"  th:value="${p.precioSuge}"></td>
+        <td th:text="${p.stock}"  th:value="${p.stock}"></td>
+      </tr>-->
+      </tbody>
+    </table>
+  </div>
+
+
+  <!-- 3️⃣ Textbox y botón que abre modal -->
+  <div class="mt-3 d-flex">
+    <input  type="hidden" id="txtDescip">
+    <input type="text" class="form-control me-2" placeholder="Nuevo producto" id="nuevoProducto">
+    <input type="number" class="form-control me-2" placeholder="precio" id="txtprecio">
+    <input type="number" class="form-control me-2" placeholder="cantidad" id="txtcantidad">
+
+    <select id="tipo-select-fam">
+      <option value="">-- Filtrar por Familia --</option>
+      <option th:each="f : ${familia}" th:value="${f.nom}" th:text="${f.nom}"></option>
+    </select>
+
+    <select id="tipo-select">
+      <option value="">-- Filtrar por Tipo --</option>
+    </select>
+
+    <button class="btn btn-success" type="button" onclick="agregarProducto()">
+      Agregar
+    </button>
+
+
+
+  </div>
+  <div>
+    <table id="results-table">
+      <thead>
+      <tr>
+        <th>Codigo</th>
+        <th>Descripción</th>
+        <th>Stock</th>
+        <th>precio</th>
+      </tr>
+      </thead>
+      <tbody id="table-body">
+
+
+      </tbody>
+    </table>
+    <div id="no-results" class="no-results" style="display:none;">No se encontraron resultados.</div>
+
+
+  </div>
+
+
+
+
+
+</form>
 
 
 
 <script th:inline="javascript">
   const cli = [[${cliente}]];
-  const pp = [[${producto}]];
+  const pp = [[${prods}]];
   const ppp = [[${linea}]];
 
 
   const buscaC = document.getElementById("buscaCLi");
   const autocompleteList = document.getElementById("autocomplete-list");
-  const searchInput = document.getElementById("search");
+  const searchInput = document.getElementById("nuevoProducto");
   const tipoSelect = document.getElementById("tipo-select");
   const tipoFamilia = document.getElementById("tipo-select-fam");
   const tableBody = document.getElementById("table-body");
@@ -243,9 +252,58 @@
     }
   });
 
+  function agregarProducto() {
+      const codigo = document.getElementById("nuevoProducto").value.trim();
+      const nom = document.getElementById("txtDescip").value.trim();
+      const precio = document.getElementById("txtprecio").value.trim();
+      const cantidad = document.getElementById("txtcantidad").value.trim();
 
+      if (!codigo || !nom || !precio || !cantidad) {
+          alert("Por favor, complete todos los campos");
+          return;
+      }
 
+      const tabla = document.querySelector("#tabla1 table tbody");
+      const fila = document.createElement("tr");
 
+      fila.innerHTML = `
+          <td>${codigo}</td>
+          <td>${nom}</td>
+          <td>${precio}</td>
+          <td>${cantidad}</td>
+      `;
+
+      tabla.appendChild(fila);
+
+      // Limpiar campos
+      document.getElementById("nuevoProducto").value = "";
+      document.getElementById("txtDescip").value = "";
+      document.getElementById("txtprecio").value = "";
+      document.getElementById("txtcantidad").value = "";
+  }
+  document.getElementById("miForm").addEventListener("submit", function(e) {
+      // Borrar inputs ocultos previos
+      document.querySelectorAll(".filaOculta").forEach(el => el.remove());
+
+      const filas = document.querySelectorAll("#tabla1 tbody tr");
+      filas.forEach((fila, index) => {
+          const celdas = fila.querySelectorAll("td");
+
+          agregarHidden(this, `lista[${index}].cod`, celdas[0].innerText);
+          agregarHidden(this, `lista[${index}].descrip`, celdas[1].innerText);
+          agregarHidden(this, `lista[${index}].precioSuge`, celdas[2].innerText);
+          agregarHidden(this, `lista[${index}].stock`, celdas[3].innerText);
+      });
+  });
+
+  function agregarHidden(form, name, value) {
+      const input = document.createElement("input");
+      input.type = "hidden";
+      input.classList.add("filaOculta");
+      input.name = name;
+      input.value = value;
+      form.appendChild(input);
+  }
 
 
 
@@ -302,9 +360,9 @@
         // Evento para cargar el código en el input
       fila.addEventListener("click", () => {
         document.getElementById("nuevoProducto").value = p.cod;
+        document.getElementById("txtDescip").value = p.descrip;
+        document.getElementById("txtprecio").value = p.precioSuge;
 
-        const modal = bootstrap.Modal.getInstance(document.getElementById("miModal"));
-modal.hide();
 
       });
 

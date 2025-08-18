@@ -1,6 +1,7 @@
 package fina.demo.Controller;
 
 import fina.demo.Entity.Cliente;
+import fina.demo.Entity.Dbo.ListP;
 import fina.demo.Entity.Familia;
 import fina.demo.Entity.Linea;
 import fina.demo.Entity.Producto;
@@ -8,8 +9,7 @@ import fina.demo.Service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
@@ -48,26 +48,46 @@ public class CoVenta {
     public ModelAndView v1(){
         ModelAndView mav = new ModelAndView("venta/vent");
 
-        List<Producto> lista = new ArrayList<>();
         List<Cliente> l = cliServi.listCliente();
         List<String> lista2 = new ArrayList<>();
         for (int i = 0; i < l.size() ; i++) {
             lista2.add(l.get(i).getNroDocu());
         }
 
-        mav.addObject("productos",lista);
+        mav.addObject("productos",new ListP());
         mav.addObject("cliente",lista2);
 
         List<Producto> listap = produServi.listaP();
         List<Linea> l2 = linServi.listLine();
         List<Familia> listFami = famServi.findAllFamil();
-
-        mav.addObject("producto",listap);
+        mav.addObject("prods",listap);
         mav.addObject("linea",l2);
         mav.addObject("familia", listFami);
 
 
         return mav;
+    }
+
+
+    @PostMapping("/post")
+    public String v1p(@ModelAttribute("productos") ListP productos,
+                      @RequestParam(name = "cliente",required = false) String cliente){
+
+
+
+        System.out.println("paso");
+        System.out.println("cliente: "+cliente);
+
+
+        List<Producto> lista = productos.getLista();
+        for (Producto p : lista) {
+            System.out.println(p.getCod());
+        }
+
+
+
+
+        return "redirect:/venta";
     }
 
 
